@@ -37,6 +37,7 @@ export default class Login extends Component {
       <Redirect to="/search" />)
       : (
         <div data-testid="page-login">
+          <h1>TrybeTunes</h1>
           {loading ? <Loading /> : (
             <form>
               <label htmlFor="userName">

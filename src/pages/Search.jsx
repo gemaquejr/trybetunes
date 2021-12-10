@@ -6,9 +6,9 @@ export default class Search extends Component {
   render() {
     return (
       <div data-testid="page-search">
+        <h1>TrybeTunes</h1>
         <Header />
         <Form />
-        Search
       </div>
 
     );

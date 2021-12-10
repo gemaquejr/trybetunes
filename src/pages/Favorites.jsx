@@ -5,8 +5,8 @@ export default class Favorites extends Component {
   render() {
     return (
       <div data-testid="page-favorites">
+        <h1>TrybeTunes</h1>
         <Header />
-        Favorites
       </div>
 
     );
