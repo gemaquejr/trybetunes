@@ -12,10 +12,7 @@ export default class Loading extends Component {
   handleInput = ({ target }) => {
     const { name, value } = target;
     const enableButton = 2;
-    this.setState(() => ({
-      [name]: value,
-      isDisabled: value.length < enableButton,
-    }));
+    this.setState(() => ({ [name]: value, isDisabled: value.length < enableButton }));
   };
 
   render() {

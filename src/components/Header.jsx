@@ -28,6 +28,7 @@ export default class Header extends Component {
           <span data-testid="header-user-name">
             {name}
           </span>
+
           <nav>
             <Link data-testid="link-to-search" to="../search">
               Pesquisar
@@ -39,6 +40,7 @@ export default class Header extends Component {
               Perfil
             </Link>
           </nav>
+
         </header>
       );
   }
