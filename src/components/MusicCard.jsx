@@ -7,7 +7,7 @@ export default class MusicCard extends Component {
     return (
       <div>
         {musicResult.slice([1])
-          .map(({ artworkUrl100, trackName, previewUrl, collectionName }) => (
+          .map(({ trackId, artworkUrl100, trackName, previewUrl, collectionName }) => (
             <>
               <li>{trackName}</li>
               <img src={ artworkUrl100 } alt={ collectionName } />
@@ -20,6 +20,13 @@ export default class MusicCard extends Component {
                 O seu navegador não suporta o elemento
                 <code>audio</code>
               </audio>
+              <label htmlFor="favorites">
+                Favorita
+                <input
+                  data-testid={ `checkbox-music-${trackId}` }
+                  type="checkbox"
+                />
+              </label>
             </>
           ))}
       </div>
