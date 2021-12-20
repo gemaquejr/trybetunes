@@ -35,7 +35,13 @@ export default class Album extends Component {
         <img src={ artworkUrl100 } alt={ collectionName } />
         <h4 data-testid="album-name">{ collectionName }</h4>
 
-        <MusicCard musicResult={ musicResult } />
+        {/* Marco Severo me ajudou na lógica. */}
+
+        {musicResult.slice([1]).map((music) => (
+          <div key={ music.id }>
+            <MusicCard music={ music } />
+          </div>
+        ))}
       </div>
     );
   }
