@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Loading from './Loading';
-import { addSong, getFavoriteSongs } from '../services/favoriteSongsAPI';
+import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
 export default class MusicCard extends Component {
   constructor() {
@@ -18,15 +18,18 @@ export default class MusicCard extends Component {
     this.handleFavorite();
   }
 
-  handleInput = async () => {
+  // Emmmanoel Porto me ajudou a Refatorar a função handleInput para incorporar a função removeSong.
+  async handleInput({ target: { checked } }) {
     const { music: { trackId } } = this.props;
-    this.setState({ loading: true, checked: true });
-    const response = await addSong(trackId);
-    if (response === 'OK') {
-      this.setState({
-        loading: false,
-      });
-    }
+    this.setState({ loading: true }, async () => {
+      if (checked) {
+        await addSong(trackId);
+        this.setState({ loading: false, checked: true });
+      } else {
+        await removeSong(trackId);
+        this.setState({ loading: false, checked: false });
+      }
+    });
   }
 
   handleFavorite = async () => {
