@@ -1,47 +1,52 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Loading from './Loading';
 import { getUser } from '../services/userAPI';
 
-export default class Header extends Component {
+class Header extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      name: '',
-      loading: true,
+      isLoading: true,
+      userName: '',
     };
+
+    this.loadUserName = this.loadUserName.bind(this);
   }
 
   componentDidMount() {
-    getUser().then(({ name }) => {
-      this.setState({ name, loading: false });
-    });
+    this.loadUserName();
+  }
+
+  async loadUserName() {
+    const { name: userName } = await getUser();
+    this.setState({ isLoading: false, userName });
   }
 
   render() {
-    const { name, loading } = this.state;
+    const { isLoading, userName } = this.state;
 
-    return loading ? (
-      <Loading />)
-      : (
-        <header data-testid="header-component">
-          <span data-testid="header-user-name">
-            {name}
-          </span>
+    return (
+      <header data-testid="header-component">
+        <div className="informations-header">
+          <div>
+            {
+              isLoading ? <Loading /> : (
+                <h3 data-testid="header-user-name">{ userName }</h3>
+              )
+            }
+          </div>
+        </div>
 
-          <nav>
-            <Link data-testid="link-to-search" to="../search">
-              Pesquisar
-            </Link>
-            <Link data-testid="link-to-favorites" to="../favorites">
-              Favoritas
-            </Link>
-            <Link data-testid="link-to-profile" to="../profile">
-              Perfil
-            </Link>
-          </nav>
-
-        </header>
-      );
+        <nav className="links-header">
+          <Link data-testid="link-to-search" to="/search">Pesquisa</Link>
+          <Link data-testid="link-to-favorites" to="/favorites">Favoritas</Link>
+          <Link data-testid="link-to-profile" to="/profile">Perfil</Link>
+        </nav>
+      </header>
+    );
   }
 }
+
+export default Header;
