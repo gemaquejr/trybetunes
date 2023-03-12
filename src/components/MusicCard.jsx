@@ -1,92 +1,103 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import Loading from './Loading';
 import { addSong, getFavoriteSongs, removeSong } from '../services/favoriteSongsAPI';
 
-export default class MusicCard extends Component {
+class MusicCard extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      checked: false,
-      loading: false,
+      favoriteSongs: [],
+      isFavorite: false,
+      isLoading: false,
     };
-    this.handleInput = this.handleInput.bind(this);
-    this.handleFavorite = this.handleFavorite.bind(this);
+
+    this.checkFavoriteSongs = this.checkFavoriteSongs.bind(this);
+    this.loadFavoriteSongs = this.loadFavoriteSongs.bind(this);
+    this.markCheckbox = this.markCheckbox.bind(this);
   }
 
   componentDidMount() {
-    this.handleFavorite();
+    this.loadFavoriteSongs();
   }
 
-  // Emmmanoel Porto me ajudou a Refatorar a função handleInput para incorporar a função removeSong.
-  async handleInput({ target: { checked } }) {
-    const { music: { trackId } } = this.props;
-    this.setState({ loading: true }, async () => {
-      if (checked) {
-        await addSong(trackId);
-        this.setState({ loading: false, checked: true });
-      } else {
-        await removeSong(trackId);
-        this.setState({ loading: false, checked: false });
-      }
-    });
+  checkFavoriteSongs() {
+    const { trackId } = this.props;
+    const { favoriteSongs } = this.state;
+    return favoriteSongs.some((song) => song.trackId === trackId);
   }
 
-  handleFavorite = async () => {
-    const { music: { trackId } } = this.props;
-    this.setState({ loading: true });
-    const response = await getFavoriteSongs();
-    if (response.some((song) => song.trackId === trackId)) {
-      this.setState({
-        loading: false, checked: true,
-      });
+  async loadFavoriteSongs() {
+    this.setState({ isLoading: true });
+    const favoriteSongs = await getFavoriteSongs();
+
+    this.setState({ favoriteSongs, isLoading: false },
+      () => this.setState({ isFavorite: this.checkFavoriteSongs() }));
+  }
+
+  async markCheckbox() {
+    const { isFavorite } = this.state;
+    const endpoint = window.location.pathname;
+    const { song, loadFavoritesSongs } = this.props;
+
+    this.setState({ isLoading: true });
+
+    if (!isFavorite) {
+      await addSong(song);
+      this.setState({ isFavorite: true });
     } else {
-      this.setState({
-        loading: false, checked: false,
-      });
+      await removeSong(song);
+
+      if (endpoint === '/favorites') {
+        await loadFavoritesSongs();
+      }
+
+      this.setState({ isFavorite: false });
     }
+
+    this.setState({ isLoading: false });
   }
 
   render() {
-    const { checked, loading } = this.state;
+    const { isFavorite, isLoading } = this.state;
+    const { audioComponent, checkboxMusicTrackId, previewUrl, trackName } = this.props;
 
-    const { music: {
-      artworkUrl100,
-      trackName,
-      previewUrl,
-      collectionName,
-      trackId,
-    } } = this.props;
     return (
-      <div>
-        <li>{trackName}</li>
-        <img src={ artworkUrl100 } alt={ collectionName } />
-        <audio
-          data-testid="audio-component"
-          src={ previewUrl }
-          controls
-        >
-          <track kind="captions" />
-          O seu navegador não suporta o elemento
-          <code>audio</code>
-        </audio>
-        {loading ? <Loading /> : (
-          <label htmlFor="favorites">
-            Favorita
-            <input
-              data-testid={ `checkbox-music-${trackId}` }
-              type="checkbox"
-              checked={ checked }
-              onChange={ (event) => this.handleInput(event) }
-            />
-          </label>
-        )}
+      <div className="music">
+        <h4>{ trackName }</h4>
 
+        <audio data-testid={ audioComponent } src={ previewUrl } controls>
+          <track kind="captions" />
+        </audio>
+
+        {
+          isLoading ? <Loading /> : (
+            <label htmlFor={ checkboxMusicTrackId }>
+              <input
+                checked={ isFavorite }
+                data-testid={ checkboxMusicTrackId }
+                id={ checkboxMusicTrackId }
+                onChange={ this.markCheckbox }
+                type="checkbox"
+              />
+              Favorita
+            </label>
+          )
+        }
       </div>
     );
   }
 }
 
+export default MusicCard;
+
 MusicCard.propTypes = {
-  music: PropTypes.string.isRequired,
+  audioComponent: PropTypes.string.isRequired,
+  checkboxMusicTrackId: PropTypes.string.isRequired,
+  loadFavoritesSongs: PropTypes.func.isRequired,
+  previewUrl: PropTypes.string.isRequired,
+  song: PropTypes.shape().isRequired,
+  trackId: PropTypes.number.isRequired,
+  trackName: PropTypes.string.isRequired,
 };
