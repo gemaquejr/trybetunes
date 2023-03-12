@@ -1,13 +1,37 @@
-# :construction: README customizado em construção ! :construction:
-<!-- Olá, Tryber!
-Esse é apenas um arquivo inicial para o README do seu projeto no qual você pode customizar e reutilizar todas as vezes que for executar o trybe-publisher.
+# Trybetunes
 
-Para deixá-lo com a sua cara, basta alterar o seguinte arquivo da sua máquina: ~/.student-repo-publisher/custom/_NEW_README.md
+Aplicação para criação de formulários utilizando sintaxe JSX com as tags: input, textarea, select, form e checkbox, fazendo uso da renderização condicional nos componentes react.
 
-É essencial que você preencha esse documento por conta própria, ok?
-Não deixe de usar nossas dicas de escrita de README de projetos, e deixe sua criatividade brilhar!
-:warning: IMPORTANTE: você precisa deixar nítido:
-- quais arquivos/pastas foram desenvolvidos por você; 
-- quais arquivos/pastas foram desenvolvidos por outra pessoa estudante;
-- quais arquivos/pastas foram desenvolvidos pela Trybe.
--->
+![preview](.github/preview.gif)
+
+Essa aplicação simulará um personalizador de cartas, similar ao jogo super trunfo, onde podemos criar um baralho com: nome, imagens (Basta ter o endereço da url), atributos, e com isso criar cartas com qualquer tema.
+
+## 🚀 Tecnologia
+
+- ⚡ React é uma biblioteca JavaScript de código aberto focada na criação de interfaces de usuário em páginas da web.
+
+- ⚡ HTML é a linguagem base para se desenvolver qualquer site. 
+
+- ⚡ CSS é uma linguagem de folha de estilo composta por “camadas”, criado com o propósito de estilizar as páginas HTML.
+
+## ✋🏻 Pré-requisitos
+
+- [git](https://git-scm.com/downloads): Ferramenta para gerenciar o código-fonte
+
+- [Visual Studio Code](https://code.visualstudio.com/): Editor de Código Fonte
+
+- [React](https://reactjs.org/): Biblioteca JavaScript para criar interfaces de usuário
+
+## :hammer_and_wrench: Antes de iniciar o projeto.
+
+No diretório do projeto, instale as dependências e inicialize o projeto:
+
+### `npm install`
+
+Instala as dependências.
+
+### `npm start`
+
+Executa o aplicativo no modo de desenvolvimento.
+
+Abra [http://localhost:3000](http://localhost:3000) para visualizá-lo em seu navegador.
