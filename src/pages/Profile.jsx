@@ -1,45 +1,70 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../components/Header';
-import { getUser } from '../services/userAPI';
 import Loading from '../components/Loading';
+import { getUser } from '../services/userAPI';
 
-export default class Profile extends Component {
+class Profile extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      loading: false,
-      user: {},
+      isLoading: true,
+      userInfos: {},
     };
+
+    this.loadUserInfos = this.loadUserInfos.bind(this);
   }
 
   componentDidMount() {
-    this.userProfile();
+    this.loadUserInfos();
   }
 
-  userProfile() {
-    this.setState({ loading: true });
-    getUser().then((user) => {
-      this.setState({ user, loading: false });
-    });
+  async loadUserInfos() {
+    const userInfos = await getUser();
+    this.setState({ isLoading: false, userInfos });
   }
 
   render() {
-    const { user, loading } = this.state;
+    const { isLoading, userInfos } = this.state;
+
     return (
-      <div data-testid="page-profile">
-        <h1>TrybeTunes</h1>
+      <div className="page-profile" data-testid="page-profile">
         <Header />
-        {loading ? <Loading /> : (
-          <>
-            <Link to="/profile/edit">Editar perfil</Link>
-            <img data-testid="profile-image" src={ user.image } alt={ user.name } />
-            <h1>{ user.name }</h1>
-            <h1>{ user.email }</h1>
-            <h1>{ user.description }</h1>
-          </>
-        )}
+
+        {
+          isLoading ? <Loading /> : (
+            <>
+              <h1>Perfil</h1>
+
+              <div className="profile">
+                <img
+                  alt={ `Foto de ${userInfos.name}` }
+                  data-testid="profile-image"
+                  src={ userInfos.image }
+                />
+
+                <section className="profile-infos">
+                  <h2>Nome: </h2>
+                  <p>{ userInfos.name }</p>
+
+                  <h2>E-Mail: </h2>
+                  <p>{ userInfos.email }</p>
+
+                  <h2>Descrição: </h2>
+                  <p>{ userInfos.description }</p>
+                </section>
+
+                <Link className="edit-profile" to="/profile/edit">
+                  <p>Editar perfil</p>
+                </Link>
+              </div>
+            </>
+          )
+        }
       </div>
     );
   }
 }
+
+export default Profile;
