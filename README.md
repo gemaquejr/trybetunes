@@ -4,7 +4,7 @@ Aplicação para criação de formulários utilizando sintaxe JSX com as tags: i
 
 ![preview](.github/preview.gif)
 
-Essa aplicação simulará um personalizador de cartas, similar ao jogo super trunfo, onde podemos criar um baralho com: nome, imagens (Basta ter o endereço da url), atributos, e com isso criar cartas com qualquer tema.
+Essa aplicação foi feita usando React e utilizando a API do iTunes pra obter as informações das músicas.
 
 ## 🚀 Tecnologia
 
