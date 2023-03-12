@@ -1,66 +1,83 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Redirect } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { createUser } from '../services/userAPI';
 
-export default class Login extends Component {
+class Login extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      name: '',
-      loading: false,
-      isDisabled: true,
-      returnResponse: false,
+      buttonDisabled: true,
+      input: '',
+      isLoading: false,
+      isRedirecting: false,
     };
-    this.handleInput = this.handleInput.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+
+    this.enableButton = this.enableButton.bind(this);
+    this.inputChange = this.inputChange.bind(this);
+    this.submitButton = this.submitButton.bind(this);
   }
 
-  handleInput = ({ target }) => {
-    const { name, value } = target;
-    const enableButton = 3;
-    this.setState(() => ({ [name]: value, isDisabled: value.length < enableButton }));
-  }
+  enableButton() {
+    const minInput = 3;
+    const { input } = this.state;
 
-  handleSearch = async () => {
-    const { name } = this.state;
-    this.setState({ loading: true });
-    const response = await createUser({ name });
-    if (response === 'OK') {
-      this.setState({ loading: false, returnResponse: true });
+    if (input.length >= minInput) {
+      return false;
     }
+
+    return true;
   }
 
-  render = () => {
-    const { name, loading, isDisabled, returnResponse } = this.state;
-    return returnResponse ? (
-      <Redirect to="/search" />)
-      : (
-        <div data-testid="page-login">
-          <h1>TrybeTunes</h1>
-          {loading ? <Loading /> : (
+  inputChange({ target }) {
+    const { value } = target;
+
+    this.setState({ input: value },
+      () => this.setState({ buttonDisabled: this.enableButton() }));
+  }
+
+  async submitButton(event) {
+    event.preventDefault();
+    const { input } = this.state;
+
+    this.setState({ isLoading: true, isRedirecting: true });
+    await createUser({ name: input });
+  }
+
+  render() {
+    const { buttonDisabled, input, isLoading, isRedirecting } = this.state;
+
+    return (
+      <div className="page-login" data-testid="page-login">
+        {
+          isLoading ? <Loading /> : (
             <form>
-              <label htmlFor="userName">
-                <input
-                  data-testid="login-name-input"
-                  name="name"
-                  value={ name }
-                  type="text"
-                  placeholder="Nome"
-                  onChange={ (event) => this.handleInput(event) }
-                />
-              </label>
+              <input
+                data-testid="login-name-input"
+                name={ input }
+                onChange={ this.inputChange }
+                placeholder="Seu nome aqui"
+                type="text"
+                value={ input }
+              />
+
               <button
                 data-testid="login-submit-button"
-                type="button"
-                disabled={ isDisabled }
-                onClick={ (event) => this.handleSearch(event) }
+                disabled={ buttonDisabled }
+                onClick={ this.submitButton }
+                type="submit"
               >
                 Entrar
               </button>
             </form>
-          )}
-        </div>
-      );
-  };
+          )
+        }
+
+        { isRedirecting && <Redirect to="/search" /> }
+      </div>
+    );
+  }
 }
+
+export default Login;
