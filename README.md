@@ -1,10 +1,10 @@
 # Trybetunes
 
-Aplicação para criação de formulários utilizando sintaxe JSX com as tags: input, textarea, select, form e checkbox, fazendo uso da renderização condicional nos componentes react.
+Essa aplicação foi feita usando React e utilizando a API do iTunes pra fazer buscas e obter as informações das músicas.
 
 ![preview](.github/preview.gif)
 
-Essa aplicação foi feita usando React e utilizando a API do iTunes pra obter as informações das músicas.
+Aplicação para criação de formulários utilizando sintaxe JSX com as tags: input, textarea, select, form e checkbox, fazendo uso da renderização condicional nos componentes react.
 
 ## 🚀 Tecnologia
 
