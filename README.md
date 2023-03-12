@@ -10,6 +10,8 @@ Aplicação para criação de formulários utilizando sintaxe JSX com as tags: i
 
 - ⚡ React é uma biblioteca JavaScript de código aberto focada na criação de interfaces de usuário em páginas da web.
 
+- ⚡ JavaScript é uma linguagem de programação interpretada estruturada, de script em alto nível com tipagem dinâmica fraca e multiparadigma.
+
 - ⚡ HTML é a linguagem base para se desenvolver qualquer site. 
 
 - ⚡ CSS é uma linguagem de folha de estilo composta por “camadas”, criado com o propósito de estilizar as páginas HTML.
