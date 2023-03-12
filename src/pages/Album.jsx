@@ -1,56 +1,64 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React from 'react';
 import Header from '../components/Header';
+import Loading from '../components/Loading';
 import getMusics from '../services/musicsAPI';
 import MusicCard from '../components/MusicCard';
 
-export default class Album extends Component {
+class Album extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      musicResult: [],
-      artistName: '',
-      collectionName: '',
+      isLoading: true,
+      musics: [],
     };
+
+    this.loadMusics = this.loadMusics.bind(this);
   }
 
   componentDidMount() {
-    const { match: { params: { id } } } = this.props;
-    getMusics(id).then((response) => {
-      this.setState({
-        musicResult: response,
-        artistName: response[0].artistName,
-        collectionName: response[0].collectionName });
-    });
+    const albumId = window.location.pathname.split('/');
+    this.loadMusics(albumId[albumId.length - 1]);
+  }
+
+  async loadMusics(albumId) {
+    const musics = await getMusics(albumId);
+    this.setState({ isLoading: false, musics });
   }
 
   render() {
-    const { musicResult, artworkUrl100, artistName, collectionName } = this.state;
+    const { isLoading, musics } = this.state;
+
     return (
-      <div data-testid="page-album">
-        <h1>TrybeTunes</h1>
+      <div className="page-album" data-testid="page-album">
         <Header />
 
-        <h1 data-testid="artist-name">{ artistName }</h1>
-        <img src={ artworkUrl100 } alt={ collectionName } />
-        <h4 data-testid="album-name">{ collectionName }</h4>
-
-        {/* Marco Severo me ajudou na lógica. */}
-
-        {musicResult.slice([1]).map((music) => (
-          <div key={ music.id }>
-            <MusicCard music={ music } />
-          </div>
-        ))}
+        {
+          isLoading ? <Loading /> : (
+            musics.map((song, index) => (
+              index === 0 ? (
+                <div className="album" key={ song.collectionId }>
+                  <img alt={ song.collectionName } src={ song.artworkUrl100 } />
+                  <h4 data-testid="album-name">{ song.collectionName }</h4>
+                  <h5 data-testid="artist-name">{ song.artistName }</h5>
+                </div>
+              ) : (
+                <MusicCard
+                  audioComponent="audio-component"
+                  checkboxMusicTrackId={ `checkbox-music-${song.trackId}` }
+                  key={ song.trackId }
+                  previewUrl={ song.previewUrl }
+                  song={ song }
+                  trackId={ song.trackId }
+                  trackName={ song.trackName }
+                />
+              )
+            ))
+          )
+        }
       </div>
     );
   }
 }
 
-Album.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }),
-  }).isRequired,
-};
+export default Album;
