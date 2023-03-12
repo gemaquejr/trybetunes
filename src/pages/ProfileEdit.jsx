@@ -1,131 +1,142 @@
-import React, { Component } from 'react';
-import { Redirect } from 'react-router';
+import React from 'react';
+import { Redirect } from 'react-router-dom';
 import Header from '../components/Header';
-import { getUser, updateUser } from '../services/userAPI';
 import Loading from '../components/Loading';
+import { getUser, updateUser } from '../services/userAPI';
 
-export default class ProfileEdit extends Component {
+class ProfileEdit extends React.Component {
   constructor() {
     super();
+
     this.state = {
-      loading: false,
-      name: '',
-      email: '',
+      buttonDisabled: true,
       description: '',
+      email: '',
       image: '',
-      isDisabled: true,
-      submitted: false,
+      isLoading: true,
+      isRedirecting: false,
+      name: '',
     };
+
+    this.enableButton = this.enableButton.bind(this);
+    this.inputChange = this.inputChange.bind(this);
+    this.loadUserInfos = this.loadUserInfos.bind(this);
+    this.submitButton = this.submitButton.bind(this);
   }
 
   componentDidMount() {
-    this.getUser();
+    this.loadUserInfos();
   }
 
-  handleInput({ target }) {
-    const { name, value } = target;
-    this.setState({ [name]: value },
-      () => { this.saveButton(); });
-  }
+  enableButton() {
+    const { description, email, image, name } = this.state;
 
-  getUser = async () => {
-    this.setState({ loading: true });
-    const response = await getUser();
-    this.setState({
-      loading: false,
-      name: response.name,
-      email: response.email,
-      description: response.description,
-      image: response.image,
-    });
-    this.saveButton();
-  }
-
-  handleSave = async () => {
-    this.setState({ loading: true });
-    const { name, email, description, image } = this.state;
-    await updateUser({ name, email, description, image });
-    this.setState({ submitted: true, loading: false });
-  }
-
-  saveButton() {
-    const { name, email, description, image } = this.state;
-    const renderForm = [name !== '', description !== '', email !== '', image !== ''];
-    if (renderForm.every((item) => item === true)) {
-      this.setState({ isDisabled: false });
-    } else {
-      this.setState({ isDisabled: true });
+    if (
+      description !== ''
+      && email !== ''
+      && image !== ''
+      && name !== ''
+      && email.includes('@')
+      && email.split('@')[0]
+    ) {
+      this.setState({ buttonDisabled: false });
     }
+  }
+
+  inputChange({ target }) {
+    const { name, value } = target;
+    this.setState({ [name]: value }, () => this.enableButton());
+  }
+
+  async loadUserInfos() {
+    const { description, email, image, name } = await getUser();
+
+    this.setState({ description, email, image, isLoading: false, name },
+      () => this.enableButton());
+  }
+
+  async submitButton(event) {
+    event.preventDefault();
+    const { description, email, image, name } = this.state;
+
+    this.setState({ isRedirecting: true });
+    await updateUser({ description, email, image, name });
   }
 
   render() {
     const {
-      loading,
-      name,
-      email,
+      buttonDisabled,
       description,
+      email,
       image,
-      isDisabled,
-      submitted,
+      isLoading,
+      isRedirecting,
+      name,
     } = this.state;
+
     return (
-      <div data-testid="page-profile-edit">
-        <h1>TrybeTunes</h1>
+      <div className="page-profile-edit" data-testid="page-profile-edit">
         <Header />
-        {loading ? <Loading /> : (
-          <main>
-            <form>
-              <label htmlFor="image">
-                Imagem:
-                <input
+
+        {
+          isLoading ? <Loading /> : (
+            <>
+              <h1>Editar Perfil</h1>
+
+              <form>
+                <h2>Nova imagem:</h2>
+                <textarea
                   data-testid="edit-input-image"
                   name="image"
-                  onChange={ (event) => this.handleInput(event) }
+                  onChange={ this.inputChange }
+                  type="text"
                   value={ image }
                 />
-              </label>
-              <label htmlFor="name">
-                Nome:
+
+                <h2>Novo nome:</h2>
                 <input
                   data-testid="edit-input-name"
                   name="name"
-                  onChange={ (event) => this.handleInput(event) }
+                  onChange={ this.inputChange }
+                  type="text"
                   value={ name }
                 />
-              </label>
-              <label htmlFor="email">
-                E-mail:
+
+                <h2>Novo E-Mail:</h2>
                 <input
                   data-testid="edit-input-email"
                   name="email"
-                  placeholder="Ex.: teste@teste.com"
-                  onChange={ (event) => this.handleInput(event) }
+                  onChange={ this.inputChange }
+                  type="text"
                   value={ email }
                 />
-              </label>
-              <label htmlFor="description">
-                Descrição:
+
+                <h2>Nova descrição:</h2>
                 <input
                   data-testid="edit-input-description"
                   name="description"
-                  onChange={ (event) => this.handleInput(event) }
+                  onChange={ this.inputChange }
+                  type="text"
                   value={ description }
                 />
-              </label>
-              <button
-                data-testid="edit-button-save"
-                type="submit"
-                disabled={ isDisabled }
-                onClick={ this.handleSave }
-              >
-                Salvar
-              </button>
-            </form>
-            {submitted && <Redirect to="/profile" />}
-          </main>
-        )}
-      </div>
 
+                <button
+                  data-testid="edit-button-save"
+                  disabled={ buttonDisabled }
+                  onClick={ this.submitButton }
+                  type="submit"
+                >
+                  Editar perfil
+                </button>
+              </form>
+            </>
+          )
+        }
+
+        { isRedirecting && <Redirect to="/profile" /> }
+      </div>
     );
   }
 }
+
+export default ProfileEdit;
