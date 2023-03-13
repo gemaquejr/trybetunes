@@ -1,6 +1,6 @@
 # Trybetunes
 
-Essa aplicação foi feita usando React e a API pública do Itunes que apresenta recortes de 30 seg de cada canção.
+Essa aplicação foi feita usando React e a API pública do Itunes que apresenta recortes de 29 seg de cada canção.
 
 ![preview](.github/preview.gif)
 
