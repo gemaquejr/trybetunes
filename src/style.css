@@ -3,56 +3,11 @@
 }
 
 body {
-    background-color: #0b4e55;
-    color: white;
-    display: flex;
-}
-
-h1 {
-  text-align: center;
-  font-size: 40px;
-  color: rgb(98, 219, 251);
-}
-
-p {
-  color: black;
-  font-weight: bold;
-}
-
-input {
-  border: none;
-  border-radius: 15px;
-  box-shadow: 1px 1px 16px black;
-  color: black;
-  font-weight: bold;
-  text-align: center;
-  letter-spacing: 5px;
-  margin-bottom: 10px;
-  margin-top: 20px;
-  padding: 10px;
-  transition: all 0.1s linear;
-  user-select: text;
-}
-
-a {
-  color: unset;
-  text-decoration: none;
-  align-items: center;
-}
-
-button {
-  background-color: #54dc97;
-  border-radius: 5px;
-  border-style: none;
-  color: black;
-  cursor: pointer;
-  height: 30px;
+  background-color: rgb(46, 139, 87);
+  border-radius: 20px;
+  box-shadow: 0 6px 13px 0 black;
   margin: auto;
-  margin-top: 30px;
-  width: 190px;
-}
-
-form {
-  display: flex;
-  flex-direction: column;
+  padding: 20px;
+  transition: all 1s;
+  width: 70%;
 }

@@ -1,0 +1,22 @@
+input[type='checkbox'] {
+  border-bottom: 4px groove rgba(84, 12, 84, 0.76);
+  border-radius: 20px;
+  margin-left: 20px;
+  width: 25%;
+}
+
+.music {
+    color: black;
+    background-color: #C0B2B0;
+    border-radius: 10px;
+    display: flex;
+    margin: auto;
+    padding: 3px 15px;
+    position: relative;
+    text-align: center;
+    width: 70%;
+}
+
+h1 {
+    color: white;
+}

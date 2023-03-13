@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import Loading from './Loading';
 import { getUser } from '../services/userAPI';
 
+import '../styles/Header.css';
+
 class Header extends React.Component {
   constructor() {
     super();
