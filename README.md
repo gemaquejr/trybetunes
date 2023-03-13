@@ -1,10 +1,10 @@
 # Trybetunes
 
-Essa aplicação foi feita usando React e utilizando a API do iTunes pra fazer buscas e obter as informações das músicas.
+Essa aplicação foi feita usando React e a API pública do Itunes que apresenta recortes de 30 seg de cada canção.
 
 ![preview](.github/preview.gif)
 
-Aplicação para criação de formulários utilizando sintaxe JSX com as tags: input, textarea, select, form e checkbox, fazendo uso da renderização condicional nos componentes react.
+Aplicação que consiste em um player musical que faz requisições de dados vindos de uma API, utilização dos ciclos de vida de um componente e criação de rotas na aplicação.
 
 ## 🚀 Tecnologia
 
